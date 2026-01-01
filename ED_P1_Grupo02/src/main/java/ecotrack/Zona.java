@@ -17,6 +17,11 @@ public class Zona {
         this.pPendiente = pPendiente;
     }
     
+    public void registrarResiduo(Residuo r) {
+        this.residuos.agregarResiduo(r);
+        System.out.println("Residuo " + r.getId() + " registrado.");
+    }
+    
     //Función de Utilidad
     public double getUtilidad(){
         return pRecolectado - pPendiente;

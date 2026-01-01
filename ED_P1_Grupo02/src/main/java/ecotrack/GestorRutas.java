@@ -16,6 +16,14 @@ public class GestorRutas implements Runnable {
         this.colaDeZonas = new PriorityQueue<>(comparadorUtilidad);
     }
     
+    public boolean agregarZona(Zona z){
+        if (z==null){
+            return false;
+        }
+        this.colaDeZonas.offer(z);
+        return true;
+    }
+    
     public void actualizarPrioridadDeZona(Zona z) {
         this.colaDeZonas.remove(z); 
         this.colaDeZonas.add(z);
@@ -32,6 +40,14 @@ public class GestorRutas implements Runnable {
     
     public boolean hayZonasPendientes() {
         return !this.colaDeZonas.isEmpty();
+    }
+
+    public PriorityQueue<Zona> getColaDeZonas() {
+        return colaDeZonas;
+    }
+    
+    public boolean isEmpty(){
+        return this.colaDeZonas.isEmpty();
     }
 
     @Override

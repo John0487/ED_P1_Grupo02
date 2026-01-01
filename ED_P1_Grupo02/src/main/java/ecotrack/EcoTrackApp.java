@@ -1,5 +1,6 @@
 package ecotrack;
 
+import java.time.LocalDate;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,11 +17,13 @@ import javafx.stage.Stage;
 public class EcoTrackApp extends Application {
 
     private Stage primaryStage;
+    private GestorRutas colaZonas = new GestorRutas();
 
     @Override
     public void start(Stage primaryStage) {
+        this.llenarListaZonas();
         this.primaryStage = primaryStage;
-        primaryStage.setTitle("EcoTrack - Dashboard de Control");
+        primaryStage.setTitle("EcoTrack");
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
         root.setLeft(createLeftPanel());
@@ -31,6 +34,33 @@ public class EcoTrackApp extends Application {
         primaryStage.show();
     }
 
+    private void llenarListaZonas(){
+        GestorResiduos gestorNorte = new GestorResiduos(); 
+        GestorResiduos gestorCentral = new GestorResiduos();
+        GestorResiduos gestorSur = new GestorResiduos();
+        GestorResiduos gestorIndustrial = new GestorResiduos();
+        
+        Zona zonaNorte = new Zona("Zona Norte", gestorNorte, 0.0, 0.0);
+        Zona zonaCentral = new Zona("Zona Central", gestorCentral, 0.0, 0.0);
+        Zona zonaSur = new Zona("Zona Sur", gestorSur, 0.0, 0.0);
+        Zona zonaIndustrial = new Zona("Zona Industrial", gestorIndustrial, 0.0, 0.0);
+
+        long idCounter = 1;
+    
+        zonaNorte.registrarResiduo(new Residuo("R" + String.format("%04d", idCounter++),"Restos de comida", TipoResiduo.ORGANICO, 150.5, LocalDate.now().minusDays(2), zonaNorte, 5));
+        zonaNorte.registrarResiduo( new Residuo("R" + String.format("%04d", idCounter++), "Botellas de cerveza",  TipoResiduo.VIDRIO, 45.0,  LocalDate.now(),  zonaNorte,  3));
+
+        zonaCentral.registrarResiduo(new Residuo("R" + String.format("%04d", idCounter++), "Envases de bebidas", TipoResiduo.PLASTICO, 88.2, LocalDate.now().minusDays(1), zonaCentral,  4));
+    
+        zonaIndustrial.registrarResiduo(new Residuo("R" + String.format("%04d", idCounter++), "Componentes de PC viejos", TipoResiduo.ELECTRONICO, 12.7, LocalDate.now(), zonaIndustrial, 5));
+     
+        colaZonas.agregarZona(zonaNorte);
+        colaZonas.agregarZona(zonaCentral);
+        colaZonas.agregarZona(zonaSur);
+        colaZonas.agregarZona(zonaIndustrial);
+    }
+
+
     private VBox createLeftPanel() {
         VBox panelAcciones = new VBox(10); 
         panelAcciones.setPadding(new Insets(10));
@@ -39,9 +69,9 @@ public class EcoTrackApp extends Application {
         lblTitulo.setFont(new Font("Arial", 16));   
         Button btnRegistrar = new Button("Registrar Nuevo Residuo");
         Button btnDespachar = new Button("Despachar Próximo Camión");
-        Button btnProcesar = new Button("Procesar Residuos (Pila)");
-        Button btnGestionar = new Button("Gestionar Lista (Iterator)");
-        Button btnEstadisticas = new Button("Ver Estadísticas (Mapa)");
+        Button btnProcesar = new Button("Procesar Residuos");
+        Button btnGestionar = new Button("Gestionar Lista");
+        Button btnEstadisticas = new Button("Ver Estadísticas");
         btnRegistrar.setMaxWidth(Double.MAX_VALUE);
         btnDespachar.setMaxWidth(Double.MAX_VALUE);
         btnProcesar.setMaxWidth(Double.MAX_VALUE);
@@ -54,7 +84,11 @@ public class EcoTrackApp extends Application {
         );
         
         btnRegistrar.setOnAction(e -> {
-            DialogRegistrarResiduo dialog = new DialogRegistrarResiduo(primaryStage);
+            if (colaZonas.isEmpty()) {
+                Alerta.mostrarAlerta("Error", "La cola de zonas está vacía", Alert.AlertType.ERROR);
+                return; 
+            }
+            DialogRegistrarResiduo dialog = new DialogRegistrarResiduo(primaryStage,colaZonas);
             dialog.showAndWait();
         });
         
@@ -89,7 +123,7 @@ public class EcoTrackApp extends Application {
         TableColumn<ZonaEstado, String> colPendiente = new TableColumn<>("P. pendiente");
         colPendiente.setCellValueFactory(new PropertyValueFactory<>("pendiente"));
 
-        TableColumn<ZonaEstado, Double> colUtilidad = new TableColumn<>("Utilidad (U;)");
+        TableColumn<ZonaEstado, Double> colUtilidad = new TableColumn<>("Utilidad (U)");
         colUtilidad.setCellValueFactory(new PropertyValueFactory<>("utilidad"));
         
         tabla.getColumns().addAll(colZona, colRecolectado, colPendiente, colUtilidad);

@@ -1,4 +1,5 @@
 ecotrack\DialogRegistrarResiduo.class
+ecotrack\DoublyCircularLinkedList$2.class
 ecotrack\GestorRutas.class
 ecotrack\ZonaEstado.class
 ecotrack\DoublyCircularLinkedList.class
@@ -12,4 +13,6 @@ ecotrack\DoublyCircularNodeList.class
 ecotrack\DialogGestionResiduos.class
 ecotrack\DialogEstadisticas.class
 ecotrack\EcoTrackApp.class
+ecotrack\Alerta.class
+ecotrack\DoublyCircularLinkedList$1.class
 ecotrack\GestorResiduos.class

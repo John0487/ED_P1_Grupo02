@@ -13,13 +13,16 @@ public class GestorResiduos {
         this.listaDeResiduos = new DoublyCircularLinkedList<>();
     }
 
-    public void registrarResiduo(Residuo r) {
-        this.listaDeResiduos.addLast(r);
-        System.out.println("Residuo " + r.getId() + " registrado.");
-    }
-
     public DoublyCircularLinkedList<Residuo> getListaResiduos() {
         return this.listaDeResiduos;
+    }
+    
+    public boolean agregarResiduo(Residuo r){
+        if(r==null){
+            return false;
+        }
+        this.listaDeResiduos.addLast(r);
+        return true;
     }
     
 }

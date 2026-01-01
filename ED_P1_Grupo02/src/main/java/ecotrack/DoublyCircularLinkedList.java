@@ -22,7 +22,6 @@ public class DoublyCircularLinkedList<E> implements List<E>{
     
     public void setLast(DoublyCircularNodeList<E> last){
         this.header.setPrevious(last);
-        
     }
     
     public void setHeader(DoublyCircularNodeList<E> header){
@@ -36,8 +35,22 @@ public class DoublyCircularLinkedList<E> implements List<E>{
     }
 
     @Override
-    public boolean addLast(E e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean addLast(E content) {
+        DoublyCircularNodeList<E> n = new DoublyCircularNodeList<>(content);
+
+        if (isEmpty()) {
+            header = n;
+            setLast(n);
+            header.setNext(header);
+            header.setPrevious(header);
+        } else {
+            n.setNext(header);
+            n.setPrevious(header.getPrevious());
+            header.getPrevious().setNext(n);
+            header.setPrevious(n);
+        }
+        size++;
+        return true;
     }
 
     @Override
@@ -52,12 +65,12 @@ public class DoublyCircularLinkedList<E> implements List<E>{
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return size == 0;
     }
 
     @Override
