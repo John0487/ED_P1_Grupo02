@@ -1,5 +1,7 @@
 package ecotrack;
 
+import java.util.Comparator;
+
 /**
  *
  * @author Grupo 02
@@ -10,6 +12,8 @@ public interface List<E> extends Iterable<E>{
     public boolean addFirst(E e);
             
     public boolean addLast(E e);
+    
+    public boolean add(E e);
             
     public E removeFirst();
     
@@ -29,6 +33,7 @@ public interface List<E> extends Iterable<E>{
     
     public E set(int index, E element);
     
+    public void sort(List<E> list, String criterio); 
 }
 
 

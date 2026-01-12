@@ -1,7 +1,8 @@
+ecotrack\IteratorBidireccional.class
 ecotrack\DialogRegistrarResiduo.class
-ecotrack\DoublyCircularLinkedList$2.class
 ecotrack\GestorRutas.class
 ecotrack\ZonaEstado.class
+ecotrack\DialogVisualizarResiduos.class
 ecotrack\DoublyCircularLinkedList.class
 ecotrack\TipoResiduo.class
 ecotrack\CentroReciclaje.class
@@ -10,9 +11,9 @@ ecotrack\Residuo.class
 ecotrack\GestorPersistencia.class
 ecotrack\List.class
 ecotrack\DoublyCircularNodeList.class
-ecotrack\DialogGestionResiduos.class
 ecotrack\DialogEstadisticas.class
+ecotrack\DialogCentroReciclaje.class
 ecotrack\EcoTrackApp.class
+ecotrack\ArrayList.class
 ecotrack\Alerta.class
-ecotrack\DoublyCircularLinkedList$1.class
 ecotrack\GestorResiduos.class

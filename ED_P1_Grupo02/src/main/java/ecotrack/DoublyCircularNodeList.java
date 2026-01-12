@@ -1,12 +1,14 @@
 
 package ecotrack;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Grupo 02
  */
 
-public class DoublyCircularNodeList<E>{
+public class DoublyCircularNodeList<E> implements Serializable{
     private E content;
     private DoublyCircularNodeList<E> next;
     private DoublyCircularNodeList<E> previous;

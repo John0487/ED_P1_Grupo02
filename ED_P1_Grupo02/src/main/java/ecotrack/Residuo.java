@@ -1,12 +1,14 @@
 package ecotrack;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
  *
  * @author Grupo 02
  */
-public class Residuo {
+
+public class Residuo implements Serializable {
     private String id;
     private String nombre;
     private TipoResiduo tipo;

@@ -1,56 +1,45 @@
 package ecotrack;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.Window;
+import java.util.Map;
 
 public class DialogEstadisticas extends Stage {
 
-    public DialogEstadisticas(Window owner) {
-        initModality(Modality.WINDOW_MODAL);
+    public DialogEstadisticas(Stage owner, Map<String, Object> stats) {
         initOwner(owner);
-        setTitle("Estadísticas");
+        setTitle("Estadísticas Globales");
 
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(15));
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
 
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis(0, 1000, 200); // min, max, step
-        yAxis.setLabel("Peso (kg)");
+        double pesoTotal = (double) stats.getOrDefault("pesoTotal", 0.0);
+        int totalResiduos = (int) stats.getOrDefault("cantidadTotal", 0);
+        Map<String, Integer> conteo = (Map<String, Integer>) stats.get("conteoPorTipo");
+        Map<String, Double> pesosPorTipo = (Map<String, Double>) stats.get("pesoPorTipo");
 
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setTitle("Peso Total Recolectado por Tipo de Residuo");
-        barChart.setLegendVisible(false); // La imagen no tiene leyenda
+        root.getChildren().add(new Label("TOTAL RESIDUOS: " + totalResiduos));
+        root.getChildren().add(new Label("PESO TOTAL: " + pesoTotal + " kg"));
+        root.getChildren().add(new Separator());
+        root.getChildren().add(new Label("DESGLOSE POR TIPO:"));
 
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.getData().add(new XYChart.Data<>("Orgánico", 180));
-        series.getData().add(new XYChart.Data<>("Plástico", 250));
-        series.getData().add(new XYChart.Data<>("Vidrio", 100));
-        series.getData().add(new XYChart.Data<>("Electrónico", 950));
-        series.getData().add(new XYChart.Data<>("Metal", 900));
-
-        barChart.getData().add(series);
-        root.setCenter(barChart);
-
-        Button btnVolver = new Button("Volver al Dashboard");
-        btnVolver.setOnAction(e -> close());
+        TextArea txtDetalle = new TextArea();
+        txtDetalle.setEditable(false);
         
-        HBox panelBoton = new HBox(btnVolver);
-        panelBoton.setAlignment(Pos.CENTER_RIGHT);
-        panelBoton.setPadding(new Insets(10, 0, 0, 0));
-        root.setBottom(panelBoton);
+        StringBuilder sb = new StringBuilder();
+        conteo.forEach((tipo, cant) -> {
+            double p = pesosPorTipo.getOrDefault(tipo, 0.0);
+            sb.append("- ").append(tipo).append(": ")
+              .append(cant).append(" unidades | ")
+              .append(p).append(" kg\n");
+        });
+        
+        txtDetalle.setText(sb.toString());
+        root.getChildren().add(txtDetalle);
 
-        Scene scene = new Scene(root, 600, 500);
-        setScene(scene);
+        setScene(new Scene(root, 400, 450));
     }
 }

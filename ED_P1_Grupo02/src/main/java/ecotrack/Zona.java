@@ -1,10 +1,12 @@
 package ecotrack;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Grupo 02
  */
-public class Zona {
+public class Zona implements Serializable{
     private String nombre;
     private GestorResiduos residuos;
     private double pRecolectado;
@@ -60,6 +62,9 @@ public class Zona {
         this.residuos = residuos;
     }
     
-    
+    @Override
+    public String toString() {
+        return this.nombre;
+    }
     
 }

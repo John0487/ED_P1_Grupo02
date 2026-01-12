@@ -1,14 +1,16 @@
 package ecotrack;
 
+import java.io.Serializable;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
 /**
  *
  * @author Grupo 02
  */
 
-public class DoublyCircularLinkedList<E> implements List<E>{
+public class DoublyCircularLinkedList<E> implements List<E>,Serializable{
     private DoublyCircularNodeList header;
     private int size;
     
@@ -26,7 +28,10 @@ public class DoublyCircularLinkedList<E> implements List<E>{
     
     public void setHeader(DoublyCircularNodeList<E> header){
         this.header=header;
-        
+    }
+
+    public int getSize() {
+        return size;
     }
     
     @Override
@@ -75,12 +80,35 @@ public class DoublyCircularLinkedList<E> implements List<E>{
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (isEmpty()) return;
+        header.setPrevious(null);
+        header.setNext(null);
+        header = null; 
+        size = 0;
     }
 
     @Override
-    public boolean add(int index, E element) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean add(E e) {
+        try {
+            DoublyCircularNodeList<E> nuevo = new DoublyCircularNodeList<>(e);
+            if (header == null) {
+                header = nuevo;
+                header.setNext(header);
+                header.setPrevious(header);
+            } else {
+                DoublyCircularNodeList<E> ultimo = header.getPrevious();
+
+                nuevo.setNext(header);
+                nuevo.setPrevious(ultimo);
+
+                ultimo.setNext(nuevo);
+                header.setPrevious(nuevo);
+            }
+            size++;
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     @Override
@@ -97,51 +125,29 @@ public class DoublyCircularLinkedList<E> implements List<E>{
     public E set(int index, E element) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
-    public Iterator<E> iterator(){
-        return new Iterator<E>() {
-            private DoublyCircularNodeList<E> current = header;
-            private int count = 0;
-        
-            @Override
-            public boolean hasNext() {
-                return this.count < size;
-            }
-
-            @Override
-            public E next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException("No hay más elementos en la lista.");
-                }
-                E data = current.getContent();
-                current = current.getNext();
-                this.count++;
-                return data;
-            }
-        }; 
+    public void sort(List<E> list, String criterio) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    public Iterator<E> descendingIterator() {
-        return new Iterator<E>() {
-            private DoublyCircularNodeList<E> current = (header == null) ? null : header.getPrevious();
-            private int count = 0;
-            
-            @Override
-            public boolean hasNext() {
-                return this.count < size;
-            }
 
-            @Override
-            public E next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException("No hay más elementos en la lista.");
-                }
-                E data = current.getContent();
-                current = current.getPrevious();
-                this.count++;
-                return data;
-            }
-        }; 
+    @Override
+    public void forEach(Consumer<? super E> action) {
+        List.super.forEach(action); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public Spliterator<E> spliterator() {
+        return List.super.spliterator(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean add(int index, E element) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -13,8 +13,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class DialogRegistrarResiduo extends Stage {
-
-    public DialogRegistrarResiduo(Window owner, GestorRutas zonas) {
+  
+    public DialogRegistrarResiduo(Window owner, Zona[] zonas, EcoTrackApp app) {
         initModality(Modality.WINDOW_MODAL);
         initOwner(owner);
         setTitle("Registrar Nuevo Residuo");
@@ -44,7 +44,7 @@ public class DialogRegistrarResiduo extends Stage {
 
         grid.add(new Label("Zona de Origen:"), 0, 3);
         ComboBox<String> cmbZona = new ComboBox<>();
-        for (Zona zona : zonas.getColaDeZonas()) {
+        for (Zona zona : zonas) {
             cmbZona.getItems().add(zona.getNombre());
         }
         cmbZona.setPromptText("Seleccione una zona");
@@ -94,7 +94,7 @@ public class DialogRegistrarResiduo extends Stage {
             
             LocalDate fechaActual = LocalDate.now(); 
             Zona zonaSeleccionada = null;
-            for (Zona zona : zonas.getColaDeZonas()) {
+            for (Zona zona : zonas) {
                 if (zona.getNombre().equals(nombreZonaSeleccionada)) {
                     zonaSeleccionada = zona;
                     break; 
@@ -106,7 +106,18 @@ public class DialogRegistrarResiduo extends Stage {
                 return;
             }
             
-            int contadorResiduos = zonaSeleccionada.getResiduos().getListaResiduos().size();
+            double pesoActual = zonaSeleccionada.getpPendiente();
+            
+            
+            GestorRutas gr = EcoTrackApp.instanciaPrincipal.getGestorRutas();
+            
+            gr.getColaDeZonas().remove(zonaSeleccionada);
+            zonaSeleccionada.setpPendiente(zonaSeleccionada.getpPendiente() + 1);
+            gr.agregarZona(zonaSeleccionada);
+            
+            EcoTrackApp.instanciaPrincipal.actualizarTabla();
+            
+            int contadorResiduos = zonaSeleccionada.getResiduos().getListaResiduos().size() + 1;
             
             String id = "R" + String.format("%04d", contadorResiduos++);
     

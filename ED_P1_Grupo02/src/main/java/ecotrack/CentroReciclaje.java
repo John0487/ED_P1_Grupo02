@@ -17,32 +17,10 @@ public class CentroReciclaje {
     public CentroReciclaje() {
         this.bahiaDeProcesamiento = new LinkedList<>();
         this.estadisticasGlobales = new HashMap<>();
-        inicializarEstadisticas();
-    }
-    
-    private void inicializarEstadisticas() {
-        this.estadisticasGlobales.put("pesoTotal", 0.0);
-        this.estadisticasGlobales.put("conteoPorTipo", new HashMap<String, Integer>());
-        this.estadisticasGlobales.put("conteoPorZona", new HashMap<String, Integer>());
-    }
-    
-    public void actualizarEstadisticas(Residuo r) {
-        System.out.println("Registrando estadísticas para residuo: " + r.getId());
-    }
-    
-    public Map<String, Object> getEstadisticasGlobales() {
-        return this.estadisticasGlobales;
-    }
-    
-    public void imprimirEstadisticas() {
-        System.out.println("Estadísticas Globales del Centro");
-        System.out.println("Peso Total Procesado: " + this.estadisticasGlobales.get("pesoTotal"));
-        System.out.println("Conteo por Tipo: " + this.estadisticasGlobales.get("conteoPorTipo").toString());
-        System.out.println("Conteo por Zona: " + this.estadisticasGlobales.get("conteoPorZona").toString());
     }
 
     public void recibirResiduo(Residuo r) {
-        this.bahiaDeProcesamiento.push(r); 
+        this.bahiaDeProcesamiento.push(r);
         System.out.println("Residuo " + r.getId() + " recibido en la bahía.");
     }
     
@@ -55,4 +33,9 @@ public class CentroReciclaje {
         System.out.println("Procesando residuo: " + residuoAProcesar.getId());
         return residuoAProcesar;
     }
+
+    public Deque<Residuo> getBahiaDeProcesamiento() {
+        return bahiaDeProcesamiento;
+    }
+
 }

@@ -6,4 +6,8 @@ package ecotrack;
  */
 public enum TipoResiduo {
     ORGANICO, PLASTICO, VIDRIO, ELECTRONICO, METAL;
+
+    public int compareToIgnoreCase(TipoResiduo otro) {
+    return this.toString().compareToIgnoreCase(otro.toString());
+    }
 }

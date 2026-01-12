@@ -1,11 +1,13 @@
 package ecotrack;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Grupo 02
  */
 
-public class GestorResiduos {
+public class GestorResiduos implements Serializable{
     
     private DoublyCircularLinkedList<Residuo> listaDeResiduos;
 
@@ -25,6 +27,9 @@ public class GestorResiduos {
         return true;
     }
     
+    public void vaciarResiduos() {
+        this.listaDeResiduos.clear();
+    }
 }
 
 

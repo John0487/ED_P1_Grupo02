@@ -2,6 +2,7 @@ package ecotrack;
 
 import java.util.PriorityQueue;
 import java.util.Comparator;
+import javafx.application.Platform;
 
 /**
  *
@@ -11,9 +12,34 @@ import java.util.Comparator;
 public class GestorRutas implements Runnable {
     private PriorityQueue<Zona> colaDeZonas;
     
-    public GestorRutas() {
-        Comparator<Zona> comparadorUtilidad = (z1, z2) -> Double.compare(z1.getUtilidad(), z2.getUtilidad());   
-        this.colaDeZonas = new PriorityQueue<>(comparadorUtilidad);
+    private final Comparator<Zona> criterio_volumen = (z1, z2) -> (int)(z2.getpPendiente() - z1.getpPendiente());
+    
+    private final Comparator<Zona> criterio_impacto = (z1, z2) -> (int) (z2.getUtilidad() - z1.getUtilidad());
+    
+    public GestorRutas() { 
+        this.colaDeZonas = new PriorityQueue<>(criterio_volumen);
+    }
+    
+    public void cambiarCriterioPrioridad(boolean porVolumen, Zona[] zonas) {
+        Comparator<Zona> nuevoComparador;
+
+        if (porVolumen) {
+            nuevoComparador = criterio_volumen;
+        } else {
+            nuevoComparador = criterio_impacto;
+        }
+
+        PriorityQueue<Zona> nuevaCola = new PriorityQueue<>(nuevoComparador);
+        
+        for(Zona z: zonas){
+            nuevaCola.offer(z);
+        }
+        this.colaDeZonas = nuevaCola;
+        if (porVolumen) {
+            System.out.println("Criterio cambiado a: Volumen");
+        } else {
+        System.out.println("Criterio cambiado a: Impacto Ambiental");
+        }
     }
     
     public boolean agregarZona(Zona z){
@@ -23,13 +49,7 @@ public class GestorRutas implements Runnable {
         this.colaDeZonas.offer(z);
         return true;
     }
-    
-    public void actualizarPrioridadDeZona(Zona z) {
-        this.colaDeZonas.remove(z); 
-        this.colaDeZonas.add(z);
-        System.out.println("Zona " + z.getNombre() + " añadida a la cola con utilidad: " + z.getUtilidad());
-    }
-    
+      
     public Zona despacharProximaRuta() {
         Zona zonaUrgente = this.colaDeZonas.poll(); 
         if (zonaUrgente != null) {
@@ -49,9 +69,26 @@ public class GestorRutas implements Runnable {
     public boolean isEmpty(){
         return this.colaDeZonas.isEmpty();
     }
-
+    
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                if (!colaDeZonas.isEmpty()) {
+                    Zona zonaUrgente = despacharProximaRuta(); 
+
+                    Platform.runLater(() -> {
+                        EcoTrackApp.instanciaPrincipal.abrirVentanaSimulacion(zonaUrgente);
+                    });
+                }
+                Thread.sleep(10000); 
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
     }
+    
+    
 }
