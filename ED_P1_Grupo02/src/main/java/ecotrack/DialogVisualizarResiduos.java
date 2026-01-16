@@ -130,7 +130,7 @@ public class DialogVisualizarResiduos extends Stage {
         Comparator<Residuo> comp;
         switch (criterio) {
             case "Por Peso":
-                comp = (r1, r2) -> Double.compare(r2.getPeso(), r1.getPeso()); // Descendente
+                comp = (r1, r2) -> Double.compare(r2.getPeso(), r1.getPeso()); 
                 break;
             case "Por Tipo":
                 comp = (r1, r2) -> r1.getTipo().compareToIgnoreCase(r2.getTipo());

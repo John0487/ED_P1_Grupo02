@@ -2,14 +2,14 @@ package ecotrack;
 
 import java.util.PriorityQueue;
 import java.util.Comparator;
-import javafx.application.Platform;
+
 
 /**
  *
  * @author Grupo02
  */
 
-public class GestorRutas implements Runnable {
+public class GestorRutas{
     private PriorityQueue<Zona> colaDeZonas;
     
     private final Comparator<Zona> criterio_volumen = (z1, z2) -> (int)(z2.getpPendiente() - z1.getpPendiente());
@@ -68,26 +68,6 @@ public class GestorRutas implements Runnable {
     
     public boolean isEmpty(){
         return this.colaDeZonas.isEmpty();
-    }
-    
-    @Override
-    public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                if (!colaDeZonas.isEmpty()) {
-                    Zona zonaUrgente = despacharProximaRuta(); 
-
-                    Platform.runLater(() -> {
-                        EcoTrackApp.instanciaPrincipal.abrirVentanaSimulacion(zonaUrgente);
-                    });
-                }
-                Thread.sleep(10000); 
-
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
-        }
     }
     
     

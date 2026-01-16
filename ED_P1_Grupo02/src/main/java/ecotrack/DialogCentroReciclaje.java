@@ -13,6 +13,7 @@ import javafx.stage.Stage;
  * 
  * @author Grupo02
  */
+
 public class DialogCentroReciclaje extends Stage {
     private CentroReciclaje centro;
     private ListView<String> listaVista;

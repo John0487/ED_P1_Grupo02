@@ -112,7 +112,7 @@ public class DialogRegistrarResiduo extends Stage {
             GestorRutas gr = EcoTrackApp.instanciaPrincipal.getGestorRutas();
             
             gr.getColaDeZonas().remove(zonaSeleccionada);
-            zonaSeleccionada.setpPendiente(zonaSeleccionada.getpPendiente() + 1);
+            zonaSeleccionada.setpPendiente(pesoActual + 1);
             gr.agregarZona(zonaSeleccionada);
             
             EcoTrackApp.instanciaPrincipal.actualizarTabla();

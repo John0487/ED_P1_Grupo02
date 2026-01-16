@@ -16,6 +16,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import java.util.Iterator;
+import javafx.application.Platform;
 
 public class EcoTrackApp extends Application {
     
@@ -196,13 +198,10 @@ public class EcoTrackApp extends Application {
             Object recuperado = GestorPersistencia.cargarEstado();
             if (recuperado instanceof Zona[]) {
                 this.zonas = (Zona[]) recuperado;
-
-                // Re-sincronizar el gestor de rutas con los nuevos datos
                 gestorRutas = new GestorRutas(); 
                 for (Zona z : zonas) {
                     gestorRutas.agregarZona(z);
                 }
-
                 actualizarTabla();
                 Alerta.mostrarAlerta("Persistencia", "Sistema restaurado con éxito", Alert.AlertType.INFORMATION);
             } else {
@@ -308,19 +307,18 @@ public class EcoTrackApp extends Application {
                     final double progreso = i / 100.0;
                     final int valor = i;
 
-                    javafx.application.Platform.runLater(() -> {
+                    Platform.runLater(() -> {
                         pb.setProgress(progreso);
                         lblPorcentaje.setText(valor + "% completado");
                         if (valor == 100) lblStatus.setText("¡Zona despejada con éxito!");
                     });
                     Thread.sleep(300);
                 }
-                    javafx.application.Platform.runLater(() -> {
+                    Platform.runLater(() -> {
                     DoublyCircularLinkedList<Residuo> residuosZona = zona.getResiduos().getListaResiduos();
-
                     if (!residuosZona.isEmpty()) {
                         int cantidad = 0;
-                        java.util.Iterator<Residuo> it = residuosZona.iterator();
+                        Iterator<Residuo> it = residuosZona.iterator();
                         while (it.hasNext()) {
                             Residuo r = it.next();
                             this.centroReciclaje.recibirResiduo(r);
@@ -359,7 +357,7 @@ public class EcoTrackApp extends Application {
             if (z != null && z.getResiduos() != null) {
                 DoublyCircularLinkedList<Residuo> lista = z.getResiduos().getListaResiduos();
 
-                java.util.Iterator<Residuo> it = lista.iterator();
+                Iterator<Residuo> it = lista.iterator();
                 while (it.hasNext()) {
                     Residuo r = it.next();
                     pesoAcumuladoReal += r.getPeso();

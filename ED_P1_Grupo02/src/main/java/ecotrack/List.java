@@ -1,7 +1,5 @@
 package ecotrack;
 
-import java.util.Comparator;
-
 /**
  *
  * @author Grupo 02

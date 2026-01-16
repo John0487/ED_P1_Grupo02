@@ -16,7 +16,6 @@ public class GestorPersistencia {
     }
 
     public static void guardarEstado(Object datos) {
-        
         try (FileOutputStream fos = new FileOutputStream(NOMBRE_ARCHIVO);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(datos); 

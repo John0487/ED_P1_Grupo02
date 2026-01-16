@@ -30,12 +30,16 @@ public class DialogEstadisticas extends Stage {
         txtDetalle.setEditable(false);
         
         StringBuilder sb = new StringBuilder();
-        conteo.forEach((tipo, cant) -> {
+        for (Map.Entry<String, Integer> entrada : conteo.entrySet()) {
+            String tipo = entrada.getKey();      
+            Integer cant = entrada.getValue();  
+
             double p = pesosPorTipo.getOrDefault(tipo, 0.0);
+
             sb.append("- ").append(tipo).append(": ")
               .append(cant).append(" unidades | ")
               .append(p).append(" kg\n");
-        });
+        }
         
         txtDetalle.setText(sb.toString());
         root.getChildren().add(txtDetalle);

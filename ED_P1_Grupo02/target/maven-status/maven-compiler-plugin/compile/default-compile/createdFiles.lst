@@ -16,4 +16,5 @@ ecotrack\DialogCentroReciclaje.class
 ecotrack\EcoTrackApp.class
 ecotrack\ArrayList.class
 ecotrack\Alerta.class
+ecotrack\DoublyCircularLinkedList$1.class
 ecotrack\GestorResiduos.class

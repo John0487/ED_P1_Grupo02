@@ -42,7 +42,6 @@ public class DoublyCircularLinkedList<E> implements List<E>,Serializable{
     @Override
     public boolean addLast(E content) {
         DoublyCircularNodeList<E> n = new DoublyCircularNodeList<>(content);
-
         if (isEmpty()) {
             header = n;
             setLast(n);
@@ -143,7 +142,26 @@ public class DoublyCircularLinkedList<E> implements List<E>,Serializable{
 
     @Override
     public Iterator<E> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return new Iterator<E>() {
+            private DoublyCircularNodeList<E> actual = header;
+            private int contador = 0;
+
+            @Override
+            public boolean hasNext() {
+                return contador < size;
+            }
+
+            @Override
+            public E next() {
+                if (!hasNext()) {
+                    throw new java.util.NoSuchElementException();
+                }
+                E dato = actual.getContent();
+                actual = actual.getNext();
+                contador++;
+                return dato;
+            }
+        };
     }
 
     @Override
