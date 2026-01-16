@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javax.sound.midi.SoundbankResource;
 
 
 public class DialogVisualizarResiduos extends Stage {
@@ -17,6 +18,8 @@ public class DialogVisualizarResiduos extends Stage {
     private Label lblInfoResiduo;
     private Button btnAnterior;
     private Button btnSiguiente;
+    private Button btnSearch;
+    private TextField searchBar;
     
 
     public DialogVisualizarResiduos(Stage owner, Zona[] zonas) {
@@ -26,7 +29,17 @@ public class DialogVisualizarResiduos extends Stage {
         VBox root = new VBox(20);
         root.setPadding(new Insets(25));
         root.setAlignment(Pos.CENTER);
-
+        
+        // Inicializar barra de busqueda
+        searchBar = new TextField();
+        searchBar.setPromptText("Ingrese un ID ej. (R0001)");
+        searchBar.setMaxHeight(Double.MAX_VALUE);
+        
+        // inicalizar boton de busqueda
+        btnSearch = new Button();
+        btnSearch.setText("Buscar");
+        
+        
         comboZonas = new ComboBox<>();
         comboZonas.getItems().addAll(zonas);
         comboZonas.setPromptText("Seleccione una zona");
@@ -48,8 +61,9 @@ public class DialogVisualizarResiduos extends Stage {
         
         btnAnterior.setDisable(true);
         btnSiguiente.setDisable(true);
+        btnSearch.setDisable(true);
         
-        HBox controles = new HBox(20, btnAnterior, btnSiguiente);
+        HBox controles = new HBox(20, btnAnterior, btnSearch, btnSiguiente);
         controles.setAlignment(Pos.CENTER);
 
         comboZonas.setOnAction(e -> {
@@ -62,6 +76,7 @@ public class DialogVisualizarResiduos extends Stage {
                     lblInfoResiduo.setText("Esta zona no tiene residuos registrados.");
                     btnAnterior.setDisable(true);
                     btnSiguiente.setDisable(true);
+
                 } else {
                     actualizarListaConOrden();
                 }
@@ -83,8 +98,33 @@ public class DialogVisualizarResiduos extends Stage {
                 mostrarResiduo();
             }
         });
+        
+        // Funcionamiento del boton "BUSCAR"
+        btnSearch.setOnAction(e -> {
+            Zona seleccionada = comboZonas.getValue();
+            DoublyCircularLinkedList<Residuo> tempList = seleccionada.getResiduos().getListaResiduos();
+            
+            if (seleccionada!=null) {
+                String ID = searchBar.getText();
+                
+                IteratorBidireccional<Residuo> iteradorBusqueda = new IteratorBidireccional<>(tempList.getHeader());
+                Residuo rTest = iteradorBusqueda.obtenerActual();
+                if (validarBusqueda(ID, tempList)) {
+                    while (!iteradorBusqueda.obtenerActual().getId().equals(ID)) {
+                        rTest = iteradorBusqueda.siguiente();
+                    }
+                    lblInfoResiduo.setText(rTest.toString());
+                } else {
+                    searchBar.setText("");
+                    Alerta.mostrarAlerta("Error", "Ingrese una ID valida.", Alert.AlertType.ERROR);
+                }
+            } else {
+                searchBar.setText("");
+                Alerta.mostrarAlerta("Error", "Ingrese una zona valida.", Alert.AlertType.ERROR);
+            }
+        });
 
-        root.getChildren().addAll(new Label("Seleccione Zona:"), comboZonas,new Label("Criterio de Ordenamiento:"), comboCriterio, lblInfoResiduo, controles);
+        root.getChildren().addAll(new Label("Seleccione Zona:"), comboZonas,new Label("Criterio de Ordenamiento:"), comboCriterio, new Label("Buscar residuo por ID:"), searchBar, lblInfoResiduo, controles);
         setScene(new Scene(root, 400, 450));
     }
 
@@ -119,6 +159,7 @@ public class DialogVisualizarResiduos extends Stage {
         
         btnAnterior.setDisable(false);
         btnSiguiente.setDisable(false);
+        btnSearch.setDisable(false);
         
         ArrayList<Residuo> tempArray = new ArrayList<>();
         DoublyCircularNodeList<Residuo> aux = listaOrg.getHeader();
@@ -151,6 +192,15 @@ public class DialogVisualizarResiduos extends Stage {
 
         this.iterador = new IteratorBidireccional<>(tempCirc.getHeader());
         mostrarResiduo();
+    }
+    
+    public boolean validarBusqueda(String ID, DoublyCircularLinkedList<Residuo> listaResiduos) {
+        ArrayList<String> listaId = new ArrayList<>();
+        for (Residuo r : listaResiduos) {
+            listaId.add(r.getId());
+        }
+        
+        return listaId.contains(ID);
     }
     
 }

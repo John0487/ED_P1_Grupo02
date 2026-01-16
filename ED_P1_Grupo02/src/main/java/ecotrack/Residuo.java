@@ -84,5 +84,9 @@ public class Residuo implements Serializable {
         this.nivelPrioridad = nivelPrioridad;
     }
     
+    public String toString() {
+        return "ID: " + getId() + "\n" + "Tipo: " + getTipo() + "\n" + "Peso: " + getPeso() + " kg\n" + "Prioridad: " + getNivelPrioridad();
+    }
+    
     
 }

@@ -83,6 +83,10 @@ public class DialogRegistrarResiduo extends Stage {
                 Alerta.mostrarAlerta("Error", "El peso ingresado debe ser un número válido (ej: 15.5).", Alert.AlertType.ERROR);
                 return;
             }
+            if (peso<=0) {
+                Alerta.mostrarAlerta("Error", "El peso ingresado debe ser un número válido (ej: 15.5).", Alert.AlertType.ERROR);
+                return;
+            }
             TipoResiduo tipoResiduo;
             try {
                 String tipoEnumName = tipoResiduoTexto.toUpperCase().replace("Á", "A").replace("Ó", "O");
